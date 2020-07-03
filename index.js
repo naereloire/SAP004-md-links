@@ -3,8 +3,25 @@
 // module.exports = () => {
 //   // ...
 // };
+
 const program = require("commander");
 const package = require("./package.json");
+const fs = require("fs");
+
+let currentPath = "/home/Área de Trabalho/laboratoria/SAP004-md-links";
+const verifyFile = () => {
+  fs.stat(currentPath, (err, stats) => {
+    if (!err) {
+      if (stats.isFile()) {
+        console.log("is file?" + stats.isFile());
+      } else if (stats.isDirectory()) {
+        console.log("is directory?" + stats.isDirectory());
+      }
+    } else {
+      throw err;
+    }
+  });
+};
 
 program.version(package.version);
 
@@ -16,16 +33,21 @@ program
   .action((path, options) => {
     switch (true) {
       case options.validate && options.stats:
-        console.log(path + " validação de stats");
+        verifyFile();
+
         break;
       case options.validate:
-        console.log(path + " valido");
+        verifyFile();
+
         break;
       case options.stats:
-        console.log(path + " stats");
+        verifyFile();
+
         break;
       default:
         console.log(path + " não deu options");
     }
   });
 program.parse(process.argv);
+
+// todo;
