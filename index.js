@@ -12,18 +12,31 @@ const verifyPath = (currentPath) => {
   fs.stat(currentPath, (err, stats) => {
     if (!err) {
       if (stats.isFile()) {
-        fs.readFile(currentPath, (err, data) => {
-          if (err) {
-            throw err;
-          }
-          console.log(data);
-        });
+        if (currentPath.includes(".md")) {
+          fs.readFile(currentPath, (err, data) => {
+            if (err) {
+              throw err;
+            }
+            console.log(data);
+          });
+        } else {
+          console.log("Arquivo não possui extensão markdown");
+        }
       } else if (stats.isDirectory()) {
+        console.log("É um diretório.");
         fs.readdir(currentPath, (err, files) => {
           if (err) {
             throw err;
           }
-          console.log(files);
+
+          const filterDir = files.filter((element) => {
+            return element.includes(".md");
+          });
+          if (!filterDir) {
+            console.log("Diretório não possui arquivos com extensão md");
+          } else {
+            console.log(filterDir);
+          }
         });
       }
     } else {
