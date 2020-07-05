@@ -4,11 +4,13 @@
 //   // ...
 // };
 
+const regexLinks = /\[[^\]]*\]\(http.*\)/g;
+const regexSplitLink = /\[|\]|\(|\)/g;
+
 const program = require("commander");
 const package = require("./package.json");
 const fs = require("fs");
-const jsdom = require("jsdom");
-const { JSDOM } = jsdom;
+const { text } = require("figlet");
 
 const readDirectory = (err, files) => {
   if (err) {
@@ -28,7 +30,15 @@ const readArchive = (err, data) => {
   if (err) {
     throw err;
   }
-  console.log(data);
+  const arrayLinks = data.match(regexLinks);
+  const objectLinks = [];
+  for (const element of arrayLinks) {
+    objectLinks.push({
+      text: element.split(regexSplitLink)[1],
+      href: element.split(regexSplitLink)[3],
+    });
+  }
+  console.log(objectLinks);
 };
 
 const verifyPath = (currentPath) => {
@@ -36,7 +46,7 @@ const verifyPath = (currentPath) => {
     if (!err) {
       if (stats.isFile()) {
         if (currentPath.includes(".md")) {
-          fs.readFile(currentPath, readArchive);
+          fs.readFile(currentPath, "utf8", readArchive);
         } else {
           console.log("Arquivo não possui extensão markdown");
         }
