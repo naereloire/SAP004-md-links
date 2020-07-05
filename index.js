@@ -7,6 +7,8 @@
 const program = require("commander");
 const package = require("./package.json");
 const fs = require("fs");
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
 
 const readDirectory = (err, files) => {
   if (err) {
