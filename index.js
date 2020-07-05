@@ -8,36 +8,38 @@ const program = require("commander");
 const package = require("./package.json");
 const fs = require("fs");
 
+const readDirectory = (err, files) => {
+  if (err) {
+    throw err;
+  }
+  const filterDir = files.filter((element) => {
+    return element.includes(".md");
+  });
+  if (!filterDir) {
+    console.log("Diretório não possui arquivos com extensão md");
+  } else {
+    console.log(filterDir);
+  }
+};
+
+const readArchive = (err, data) => {
+  if (err) {
+    throw err;
+  }
+  console.log(data);
+};
+
 const verifyPath = (currentPath) => {
   fs.stat(currentPath, (err, stats) => {
     if (!err) {
       if (stats.isFile()) {
         if (currentPath.includes(".md")) {
-          fs.readFile(currentPath, (err, data) => {
-            if (err) {
-              throw err;
-            }
-            console.log(data);
-          });
+          fs.readFile(currentPath, readArchive);
         } else {
           console.log("Arquivo não possui extensão markdown");
         }
       } else if (stats.isDirectory()) {
-        console.log("É um diretório.");
-        fs.readdir(currentPath, (err, files) => {
-          if (err) {
-            throw err;
-          }
-
-          const filterDir = files.filter((element) => {
-            return element.includes(".md");
-          });
-          if (!filterDir) {
-            console.log("Diretório não possui arquivos com extensão md");
-          } else {
-            console.log(filterDir);
-          }
-        });
+        fs.readdir(currentPath, readDirectory);
       }
     } else {
       throw err;
