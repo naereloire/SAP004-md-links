@@ -18,12 +18,12 @@ const validateLink = (objectLink) => {
   if (link.startsWith("https")) {
     https.get(link, (res) => {
       objectLink["statusCode:"] = res.statusCode;
-      console.log("Message:", res.statusMessage);
+      objectLink["Message:"] = res.statusMessage;
     });
   } else {
     http.get(link, (res) => {
       objectLink["statusCode:"] = res.statusCode;
-      console.log("Message:", res.statusMessage);
+      objectLink["Message:"] = res.statusMessage;
     });
   }
   console.log(objectLink);
