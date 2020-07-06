@@ -10,11 +10,28 @@ const regexSplitLink = /\[|\]|\(|\)/g;
 const program = require("commander");
 const package = require("./package.json");
 const fs = require("fs");
-const { text } = require("figlet");
+// const { text } = require("figlet");
 
-const readDirectory = (err, files) => {
-  if (err) {
-    throw err;
+const findLink = (data) => {
+  const arrayLinks = data.match(regexLinks);
+  const objectLinks = [];
+  for (const element of arrayLinks) {
+    let arraySplitLinks = element.split(regexSplitLink);
+    arraySplitLinks = arraySplitLinks.filter((element) => {
+      return element !== "";
+    });
+    objectLinks.push({
+      text: arraySplitLinks[0],
+      href: arraySplitLinks[1],
+    });
+  }
+  return objectLinks;
+};
+
+const readDirectory = (err, files, currentPath) => {
+  if (err) throw err;
+  if (!currentPath.endsWith("/")) {
+    currentPath += "/";
   }
   const filterDir = files.filter((element) => {
     return element.includes(".md");
@@ -22,23 +39,22 @@ const readDirectory = (err, files) => {
   if (!filterDir) {
     console.log("Diretório não possui arquivos com extensão md");
   } else {
-    console.log(filterDir);
+    for (const element of filterDir) {
+      fs.readFile(currentPath + element, "utf8", (err, data) => {
+        readArchive(err, data, currentPath + element);
+      });
+    }
   }
 };
 
-const readArchive = (err, data) => {
+const readArchive = (err, data, path) => {
   if (err) {
     throw err;
   }
-  const arrayLinks = data.match(regexLinks);
-  const objectLinks = [];
-  for (const element of arrayLinks) {
-    objectLinks.push({
-      text: element.split(regexSplitLink)[1],
-      href: element.split(regexSplitLink)[3],
-    });
+  const findLinkReturn = findLink(data);
+  for (const element of findLinkReturn) {
+    console.log(`${path} ${element.href} ${element.text}`);
   }
-  console.log(objectLinks);
 };
 
 const verifyPath = (currentPath) => {
@@ -46,12 +62,16 @@ const verifyPath = (currentPath) => {
     if (!err) {
       if (stats.isFile()) {
         if (currentPath.includes(".md")) {
-          fs.readFile(currentPath, "utf8", readArchive);
+          fs.readFile(currentPath, "utf8", (err, data) => {
+            readArchive(err, data, currentPath);
+          });
         } else {
           console.log("Arquivo não possui extensão markdown");
         }
       } else if (stats.isDirectory()) {
-        fs.readdir(currentPath, readDirectory);
+        fs.readdir(currentPath, (err, data) => {
+          readDirectory(err, data, currentPath);
+        });
       }
     } else {
       throw err;
