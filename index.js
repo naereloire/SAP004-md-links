@@ -9,27 +9,30 @@ const regexSplitLink = /^\[|\]\(|\)$/g;
 const program = require("commander");
 const package = require("./package.json");
 const fs = require("fs");
-const https = require("https");
-const http = require("http");
+
 const { text } = require("figlet");
 let validate = false;
-let stats = false;
+// let stats = false;
+const superagent = require("superagent");
 
 const validateLink = (objectLink) => {
   link = objectLink.href;
-  if (link.startsWith("https")) {
-    https.get(link, (res) => {
+  superagent
+    .get(link)
+    .then((res) => {
       console.log(
-        `${objectLink.path} ${objectLink.href} ${objectLink.text} ${res.statusCode} ${res.statusMessage}`
+        `${objectLink.path} ${objectLink.href} ${res.ok ? "ok" : "fail"}  
+        ${res.statusCode}  ${objectLink.text}`
+      );
+    })
+    .catch((error) => {
+      console.log(
+        `${objectLink.path} ${objectLink.href} 
+        ${error.response.ok ? "ok" : "fail"}  
+        ${error.response.statusCode}  ${objectLink.text}`
       );
     });
-  } else {
-    http.get(link, (res) => {
-      console.log(
-        `${objectLink.path} ${objectLink.href} ${objectLink.text} ${res.statusCode} ${res.statusMessage}`
-      );
-    });
-  }
+  //
 };
 
 const findLink = (data, path) => {
