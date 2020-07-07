@@ -9,11 +9,15 @@ const regexSplitLink = /^\[|\]\(|\)$/g;
 const program = require("commander");
 const package = require("./package.json");
 const fs = require("fs");
-
+const superagent = require("superagent");
 const { text } = require("figlet");
 let validate = false;
-// let stats = false;
-const superagent = require("superagent");
+let stats = false;
+
+const statsLink = (arrayLinks) => {
+  // arrayLinks = findLink(data, path);
+  console.log(arrayLinks.length);
+};
 
 const validateLink = (objectLink) => {
   link = objectLink.href;
@@ -80,6 +84,11 @@ const readArchive = (err, data, path) => {
 
   const findLinkReturn = findLink(data, path);
   for (const element of findLinkReturn) {
+    if (stats) {
+      console.log(statsLink(element));
+    } else {
+      console.log(`${path} ${element.href} ${element.text}`);
+    }
     if (validate) {
       validateLink(element);
     } else {
@@ -125,6 +134,7 @@ program
         validate = true;
         break;
       case options.stats:
+        stats = true;
         break;
       default:
         console.log(path + " não deu options");
