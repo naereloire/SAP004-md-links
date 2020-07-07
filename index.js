@@ -13,6 +13,7 @@ const https = require("https");
 const http = require("http");
 const { text } = require("figlet");
 let validate = false;
+let stats = false;
 
 const validateLink = (objectLink) => {
   link = objectLink.href;
