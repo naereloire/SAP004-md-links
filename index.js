@@ -12,25 +12,26 @@ const fs = require("fs");
 const https = require("https");
 const http = require("http");
 const { text } = require("figlet");
+let validate = false;
 
 const validateLink = (objectLink) => {
   link = objectLink.href;
   if (link.startsWith("https")) {
     https.get(link, (res) => {
-      objectLink["statusCode:"] = res.statusCode;
-      objectLink["Message:"] = res.statusMessage;
+      console.log(
+        `${objectLink.path} ${objectLink.href} ${objectLink.text} ${res.statusCode} ${res.statusMessage}`
+      );
     });
   } else {
     http.get(link, (res) => {
-      objectLink["statusCode:"] = res.statusCode;
-      objectLink["Message:"] = res.statusMessage;
+      console.log(
+        `${objectLink.path} ${objectLink.href} ${objectLink.text} ${res.statusCode} ${res.statusMessage}`
+      );
     });
   }
-  console.log(objectLink);
-  return objectLink;
 };
 
-const findLink = (data) => {
+const findLink = (data, path) => {
   const arrayLinks = data.match(regexLinks);
   const arrayObjectLinks = [];
   for (const element of arrayLinks) {
@@ -39,10 +40,10 @@ const findLink = (data) => {
       return element !== "";
     });
     let objectLink = {
+      path,
       text: arraySplitLinks[0],
       href: arraySplitLinks[1],
     };
-    objectLink = validateLink(objectLink);
 
     arrayObjectLinks.push(objectLink);
   }
@@ -72,10 +73,14 @@ const readArchive = (err, data, path) => {
   if (err) {
     throw err;
   }
-  const findLinkReturn = findLink(data);
+
+  const findLinkReturn = findLink(data, path);
   for (const element of findLinkReturn) {
-    // console.log(element);
-    // console.log(`${path} ${element.href} ${element.text}`);
+    if (validate) {
+      validateLink(element);
+    } else {
+      console.log(`${path} ${element.href} ${element.text}`);
+    }
   }
 };
 
@@ -85,7 +90,7 @@ const verifyPath = (currentPath) => {
       if (stats.isFile()) {
         if (currentPath.includes(".md")) {
           fs.readFile(currentPath, "utf8", (err, data) => {
-            readArchive(err, data, currentPath);
+            readArchive(err, data, currentPath, validate);
           });
         } else {
           console.log("Arquivo não possui extensão markdown");
@@ -109,16 +114,17 @@ program
   .option("-v, --validate", "Validate link")
   .option("-s, --stats", "Statical of links in md file")
   .action((path, options) => {
-    verifyPath(path);
     switch (true) {
       case options.validate && options.stats:
         break;
       case options.validate:
+        validate = true;
         break;
       case options.stats:
         break;
       default:
         console.log(path + " não deu options");
     }
+    verifyPath(path);
   });
 program.parse(process.argv);
