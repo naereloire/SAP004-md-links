@@ -24,27 +24,33 @@ const statsLink = (arrayLinks) => {
   console.log(`Total:${arrayLinks.length} \nUnique:${uniqueLinks.length}`);
   if (validate) {
     for (const element of arrayLinks) {
-      validate();
+      validateLink(element, false);
     }
+    console.log(`Broken:${brokenLinks}`);
   }
 };
 
-const validateLink = (objectLink) => {
+const validateLink = (objectLink, printValidate = true) => {
   link = objectLink.href;
   superagent
     .get(link)
     .then((res) => {
-      console.log(
-        `${objectLink.path} ${objectLink.href} ${res.ok ? "ok" : "fail"}  
+      if (printValidate) {
+        console.log(
+          `${objectLink.path} ${objectLink.href} ${res.ok ? "ok" : "fail"}  
         ${res.statusCode}  ${objectLink.text}`
-      );
+        );
+      }
     })
     .catch((error) => {
-      console.log(
-        `${objectLink.path} ${objectLink.href} 
+      brokenLinks += 1;
+      if (printValidate) {
+        console.log(
+          `${objectLink.path} ${objectLink.href} 
         ${error.response.ok ? "ok" : "fail"}  
         ${error.response.statusCode}  ${objectLink.text}`
-      );
+        );
+      }
     });
   //
 };
@@ -138,6 +144,8 @@ program
   .action((path, options) => {
     switch (true) {
       case options.validate && options.stats:
+        validate = true;
+        stats = true;
         break;
       case options.validate:
         validate = true;
