@@ -15,8 +15,14 @@ let validate = false;
 let stats = false;
 
 const statsLink = (arrayLinks) => {
-  // arrayLinks = findLink(data, path);
-  console.log(arrayLinks.length);
+  const uniqueLinks = Array.from(new Set(arrayLinks.map((a) => a.href))).map(
+    (href) => {
+      return arrayLinks.find((a) => a.href === href);
+    }
+  );
+  console.log(`Total:${arrayLinks.length} \nUnique:${uniqueLinks.length}`);
+  if (validate) {
+  }
 };
 
 const validateLink = (objectLink) => {
@@ -83,16 +89,15 @@ const readArchive = (err, data, path) => {
   }
 
   const findLinkReturn = findLink(data, path);
-  for (const element of findLinkReturn) {
-    if (stats) {
-      console.log(statsLink(element));
-    } else {
-      console.log(`${path} ${element.href} ${element.text}`);
-    }
-    if (validate) {
-      validateLink(element);
-    } else {
-      console.log(`${path} ${element.href} ${element.text}`);
+  if (stats) {
+    statsLink(findLinkReturn);
+  } else {
+    for (const element of findLinkReturn) {
+      if (validate) {
+        validateLink(element);
+      } else {
+        console.log(`${path} ${element.href} ${element.text}`);
+      }
     }
   }
 };
