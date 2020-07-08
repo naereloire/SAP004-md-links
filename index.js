@@ -13,6 +13,7 @@ const superagent = require("superagent");
 const { text } = require("figlet");
 let validate = false;
 let stats = false;
+let brokenLinks = 0;
 
 const statsLink = (arrayLinks) => {
   const uniqueLinks = Array.from(new Set(arrayLinks.map((a) => a.href))).map(
@@ -22,6 +23,9 @@ const statsLink = (arrayLinks) => {
   );
   console.log(`Total:${arrayLinks.length} \nUnique:${uniqueLinks.length}`);
   if (validate) {
+    for (const element of arrayLinks) {
+      validate();
+    }
   }
 };
 
