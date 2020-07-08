@@ -15,6 +15,14 @@ let validate = false;
 let stats = false;
 let brokenLinks = 0;
 
+const processArray = (array, fn) => {
+  return array.reduce(function (p, item) {
+    return p.then(function () {
+      return fn(item);
+    });
+  }, Promise.resolve());
+};
+
 const statsLink = (arrayLinks) => {
   const uniqueLinks = Array.from(new Set(arrayLinks.map((a) => a.href))).map(
     (href) => {
@@ -23,16 +31,17 @@ const statsLink = (arrayLinks) => {
   );
   console.log(`Total:${arrayLinks.length} \nUnique:${uniqueLinks.length}`);
   if (validate) {
-    for (const element of arrayLinks) {
-      validateLink(element, false);
-    }
-    console.log(`Broken:${brokenLinks}`);
+    processArray(arrayLinks, (element) => {
+      return validateLink(element, false);
+    }).then(() => {
+      console.log(`Broken:${brokenLinks}`);
+    });
   }
 };
 
 const validateLink = (objectLink, printValidate = true) => {
   link = objectLink.href;
-  superagent
+  return superagent
     .get(link)
     .then((res) => {
       if (printValidate) {
