@@ -8,7 +8,6 @@ let brokenLinks = 0;
 function ObjectFn(validate, stats) {
   this.validate = validate;
   this.stats = stats;
-
   /**
    * Função
    * @param {}
@@ -72,7 +71,6 @@ function ObjectFn(validate, stats) {
       });
     //
   };
-
   /**
    * Função cria array de objetos de links, utilizando expressão regular para indentificar links.
    * @param {String} data Contém todo o conteúdo do arquivo markdown.
