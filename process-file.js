@@ -2,7 +2,6 @@ const regexLinks = /\[[^\]]*\]\(http.*\)/g;
 const regexSplitLink = /^\[|\]\(|\)$/g;
 const fs = require("fs");
 const superagent = require("superagent");
-const { resolve } = require("path");
 let brokenLinks = 0;
 
 function ObjectFn(validate, stats) {
