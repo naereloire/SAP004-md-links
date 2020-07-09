@@ -1,5 +1,5 @@
 // const mdLinks = require('../');
-import { findLink } from "./index.js";
+const { findLink } = require("../index.js");
 
 describe("findLinks", () => {
   it("is a function", () => {

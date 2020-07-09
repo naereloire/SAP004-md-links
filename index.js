@@ -7,7 +7,7 @@
 const regexLinks = /\[[^\]]*\]\(http.*\)/g;
 const regexSplitLink = /^\[|\]\(|\)$/g;
 const program = require("commander");
-const package = require("./package.json");
+const pack = require("./package.json");
 const fs = require("fs");
 const superagent = require("superagent");
 const { text } = require("figlet");
@@ -70,7 +70,7 @@ const validateLink = (objectLink, printValidate = true) => {
  * @param {String} path Nome do arquivo markdown.
  * @returns Array de obejtos de links, contendo path, text e href como keys.
  */
-export const findLink = (data, path) => {
+const findLink = (data, path) => {
   const arrayLinks = data.match(regexLinks);
   const arrayObjectLinks = [];
   for (const element of arrayLinks) {
@@ -149,7 +149,7 @@ const verifyPath = (currentPath) => {
   });
 };
 
-program.version(package.version);
+program.version(pack.version);
 
 program
   .command("md-links <path>")
