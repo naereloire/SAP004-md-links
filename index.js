@@ -64,7 +64,13 @@ const validateLink = (objectLink, printValidate = true) => {
   //
 };
 
-const findLink = (data, path) => {
+/**
+ * Função cria array de objetos de links, utilizando expressão regular para indentificar links.
+ * @param {String} data Contém todo o conteúdo do arquivo markdown.
+ * @param {String} path Nome do arquivo markdown.
+ * @returns Array de obejtos de links, contendo path, text e href como keys.
+ */
+export const findLink = (data, path) => {
   const arrayLinks = data.match(regexLinks);
   const arrayObjectLinks = [];
   for (const element of arrayLinks) {
