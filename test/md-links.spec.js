@@ -1,5 +1,4 @@
-// const mdLinks = require('../');
-const { findLink } = require("../index.js");
+const { findLink } = require("../file.js");
 
 describe("findLinks", () => {
   it("is a function", () => {
