@@ -144,9 +144,9 @@ const objectFn = {
     }
   },
   /**
-   * Função que verificar se o caminho passado é um diretório ou um arquivo.
+   * Função que verificar se o caminho passado é um diretório ou um arquivo, acioando a função para o caminho correspondente.
    * @param {String} currentPath Nome do caminho.
-   * @returns
+  
    */
   verifyPath: (currentPath) => {
     fs.stat(currentPath, (err, status) => {
