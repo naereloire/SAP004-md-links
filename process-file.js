@@ -2,49 +2,53 @@ const regexLinks = /\[[^\]]*\]\(http.*\)/g;
 const regexSplitLink = /^\[|\]\(|\)$/g;
 const fs = require("fs");
 const superagent = require("superagent");
+const { resolve } = require("path");
 let brokenLinks = 0;
 
-const objectFn = {
+function ObjectFn(validate, stats) {
+  this.validate = validate;
+  this.stats = stats;
+
   /**
    * Função
    * @param {}
    * @param {}
    * @returns
    */
-  processArray: (array, fn) => {
+  this.processArray = (array, fn) => {
     return array.reduce(function (p, item) {
       return p.then(function () {
         return fn(item);
       });
     }, Promise.resolve());
-  },
+  };
   /**
    * Função
    * @param {}
    * @returns
    */
-  statsLink: (arrayLinks) => {
+  this.statsLink = (arrayLinks) => {
     const uniqueLinks = Array.from(new Set(arrayLinks.map((a) => a.href))).map(
       (href) => {
         return arrayLinks.find((a) => a.href === href);
       }
     );
     console.log(`Total:${arrayLinks.length} \nUnique:${uniqueLinks.length}`);
-    if (validate) {
-      processArray(arrayLinks, (element) => {
-        return validateLink(element, false);
+    if (this.validate) {
+      this.processArray(arrayLinks, (element) => {
+        return this.validateLink(element, false);
       }).then(() => {
         console.log(`Broken:${brokenLinks}`);
       });
     }
-  },
+  };
   /**
    * Função
    * @param {}
    * @param {}
    * @returns
    */
-  validateLink: (objectLink, printValidate = true) => {
+  this.validateLink = (objectLink, printValidate = true) => {
     link = objectLink.href;
     return superagent
       .get(link)
@@ -67,7 +71,7 @@ const objectFn = {
         }
       });
     //
-  },
+  };
 
   /**
    * Função cria array de objetos de links, utilizando expressão regular para indentificar links.
@@ -75,7 +79,7 @@ const objectFn = {
    * @param {String} path Nome do arquivo markdown.
    * @returns Array de obejtos de links, contendo path, text e href como keys.
    */
-  findLink: (data, path) => {
+  this.findLink = (data, path) => {
     const arrayLinks = data.match(regexLinks);
     const arrayObjectLinks = [];
     for (const element of arrayLinks) {
@@ -92,7 +96,7 @@ const objectFn = {
       arrayObjectLinks.push(objectLink);
     }
     return arrayObjectLinks;
-  },
+  };
   /**
    * Função
    * @param {}
@@ -100,7 +104,7 @@ const objectFn = {
    * @param {}
    * @returns
    */
-  readDirectory: (err, files, currentPath) => {
+  this.readDirectory = (err, files, currentPath) => {
     if (err) throw err;
     if (!currentPath.endsWith("/")) {
       currentPath += "/";
@@ -113,11 +117,11 @@ const objectFn = {
     } else {
       for (const element of filterDir) {
         fs.readFile(currentPath + element, "utf8", (err, data) => {
-          readArchive(err, data, currentPath + element);
+          this.readArchive(err, data, currentPath + element);
         });
       }
     }
-  },
+  };
   /**
    * Função
    * @param {}
@@ -125,48 +129,48 @@ const objectFn = {
    * @param {}
    * @returns
    */
-  readArchive: (err, data, path) => {
+  this.readArchive = (err, data, path) => {
     if (err) {
       throw err;
     }
 
-    const findLinkReturn = findLink(data, path);
-    if (stats) {
-      statsLink(findLinkReturn);
+    const findLinkReturn = this.findLink(data, path);
+    if (this.stats) {
+      this.statsLink(findLinkReturn);
     } else {
       for (const element of findLinkReturn) {
-        if (validate) {
-          validateLink(element);
+        if (this.validate) {
+          this.validateLink(element);
         } else {
           console.log(`${path} ${element.href} ${element.text}`);
         }
       }
     }
-  },
+  };
   /**
    * Função que verificar se o caminho passado é um diretório ou um arquivo, acioando a função para o caminho correspondente.
    * @param {String} currentPath Nome do caminho.
    */
-  verifyPath: (currentPath) => {
+  this.verifyPath = (currentPath) => {
     fs.stat(currentPath, (err, status) => {
       if (!err) {
         if (status.isFile()) {
           if (currentPath.includes(".md")) {
             fs.readFile(currentPath, "utf8", (err, data) => {
-              readArchive(err, data, currentPath, validate);
+              this.readArchive(err, data, currentPath, validate);
             });
           } else {
             console.log("Arquivo não possui extensão markdown");
           }
         } else if (status.isDirectory()) {
           fs.readdir(currentPath, (err, data) => {
-            readDirectory(err, data, currentPath);
+            this.readDirectory(err, data, currentPath);
           });
         }
       } else {
         throw err;
       }
     });
-  },
-};
-module.exports = objectFn;
+  };
+}
+module.exports = ObjectFn;

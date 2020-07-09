@@ -1,10 +1,28 @@
 #!/usr/bin/env node
-const objectFuncs = require("./process-file.js");
+const ObjectFuncs = require("./process-file.js");
 
 const program = require("commander");
 const pack = require("./package.json");
 let validate = false;
 let stats = false;
+
+// const mdLinks = (path, options) => {
+//   return new Promise((resolve, reject) => {
+//     if (somethingSuccesfulHappened) {
+//       const successObject = {
+//         msg: "Success",
+//         data, //...some data we got back
+//       };
+//       resolve(successObject);
+//     } else {
+//       const errorObject = {
+//         msg: "An error occured",
+//         error, //...some error we got back
+//       };
+//       reject(errorObject);
+//     }
+//   });
+// };
 
 program.version(pack.version);
 
@@ -28,6 +46,7 @@ program
       default:
         console.log(path + " não deu options");
     }
-    verifyPath(path);
+    const verify = new ObjectFuncs(validate, stats);
+    verify.verifyPath(path);
   });
 program.parse(process.argv);
