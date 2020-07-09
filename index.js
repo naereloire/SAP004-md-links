@@ -122,9 +122,9 @@ const readArchive = (err, data, path) => {
 };
 
 const verifyPath = (currentPath) => {
-  fs.stat(currentPath, (err, stats) => {
+  fs.stat(currentPath, (err, status) => {
     if (!err) {
-      if (stats.isFile()) {
+      if (status.isFile()) {
         if (currentPath.includes(".md")) {
           fs.readFile(currentPath, "utf8", (err, data) => {
             readArchive(err, data, currentPath, validate);
@@ -132,7 +132,7 @@ const verifyPath = (currentPath) => {
         } else {
           console.log("Arquivo não possui extensão markdown");
         }
-      } else if (stats.isDirectory()) {
+      } else if (status.isDirectory()) {
         fs.readdir(currentPath, (err, data) => {
           readDirectory(err, data, currentPath);
         });
