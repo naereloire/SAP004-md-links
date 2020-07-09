@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const objectFuncs = require("./file.js");
+const objectFuncs = require("./process-file.js");
 
 const program = require("commander");
 const pack = require("./package.json");
