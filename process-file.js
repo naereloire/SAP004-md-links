@@ -149,24 +149,27 @@ function ObjectFn(validate, stats) {
    * @param {String} currentPath Nome do caminho.
    */
   this.verifyPath = (currentPath) => {
+    let objectLink;
+    let sucess;
     fs.stat(currentPath, (err, status) => {
-      if (!err) {
-        if (status.isFile()) {
-          if (currentPath.includes(".md")) {
-            fs.readFile(currentPath, "utf8", (err, data) => {
-              this.readArchive(err, data, currentPath, validate);
-            });
-          } else {
-            console.log("Arquivo não possui extensão markdown");
-          }
-        } else if (status.isDirectory()) {
-          fs.readdir(currentPath, (err, data) => {
-            this.readDirectory(err, data, currentPath);
-          });
-        }
-      } else {
+      if (err) {
         throw err;
       }
+      if (status.isFile()) {
+        if (currentPath.includes(".md")) {
+          fs.readFile(currentPath, "utf8", (err, data) => {
+            this.readArchive(err, data, currentPath, validate);
+          });
+        } else {
+          console.log("Arquivo não possui extensão markdown");
+        }
+      } else if (status.isDirectory()) {
+        fs.readdir(currentPath, (err, data) => {
+          this.readDirectory(err, data, currentPath);
+        });
+      }
+    }).then(() => {
+      return { obLinks: objectLink, status: sucess };
     });
   };
 }
