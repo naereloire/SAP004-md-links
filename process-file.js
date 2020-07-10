@@ -168,9 +168,10 @@ function ObjectFn(validate, stats) {
           this.readDirectory(err, data, currentPath);
         });
       }
-    }).then(() => {
-      return { obLinks: objectLink, status: sucess };
     });
+    // .then(() => {
+    //   return { obLinks: objectLink, status: sucess };
+    // });
   };
 }
 module.exports = ObjectFn;
