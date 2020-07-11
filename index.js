@@ -1,14 +1,14 @@
 #!/usr/bin/env node
+let testando;
 const ObjectFuncs = require("./process-file.js");
 
-const program = require("commander");
-const pack = require("./package.json");
-let validate = false;
-let stats = false;
-
-const mdLinks = (path, options) => {
+module.exports = mdLinks = (path, options) => {
+  let validate = false;
+  if (options) {
+    validate = options.validate;
+  }
   return new Promise((resolve, reject) => {
-    const verify = new ObjectFuncs(false, options.validate, false);
+    const verify = new ObjectFuncs(false, validate, false);
 
     verify.verifyPath(path).then((promiseList) => {
       if (promiseList.length === 0) {
@@ -24,22 +24,3 @@ const mdLinks = (path, options) => {
     });
   });
 };
-
-program.version(pack.version);
-
-program
-  .command("md-links <path>")
-  .description("Scan md file")
-  .option("-v, --validate", "Validate link")
-  .option("-s, --stats", "Statical of links in md file")
-  .action((path, options) => {
-    if (options.validate) {
-      validate = true;
-    }
-    if (options.stats) {
-      stats = true;
-    }
-    const verify = new ObjectFuncs(true, validate, stats);
-    verify.verifyPath(path);
-  });
-program.parse(process.argv);

@@ -1,23 +1,30 @@
 {
   "name": "md-links",
   "version": "0.1.0",
+  "description": "Mardown Links CLI/LIB",
+  "main": "./index.js",
+  "license": "MIT",
+  "scripts": {
+    "eslint": "eslint --ext .js ./",
+    "pretest": "npm run eslint",
+    "test": "jest --coverage"
+  },
   "dependencies": {
     "chalk": "^4.1.0",
     "cli-table": "^0.3.1",
     "commander": "^5.1.0",
+    "eslint": "^7.4.0",
     "figlet": "^1.4.0",
     "inquirer": "^7.3.0",
     "prettier": "^2.0.5",
     "shelljs": "^0.8.4",
     "superagent": "^5.3.1"
   },
-  "bin": {
-    "todo": "index.js"
-  },
   "devDependencies": {
     "jest": "^26.1.0"
   },
-  "scripts": {
-    "test": "jest"
+  "bin": "./cli.js",
+  "author": {
+    "name": "Naere Loire Guimarães"
   }
 }
