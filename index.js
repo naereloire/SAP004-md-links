@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-const ObjectFuncs = require("./process-file.js");
 
+const ObjectFuncs = require("./process-file.js");
 const program = require("commander");
 const pack = require("./package.json");
 let validate = false;
 let stats = false;
 
-const mdLinks = (path, options) => {
+exports.mdLinks = (path, options) => {
   return new Promise((resolve, reject) => {
     const verify = new ObjectFuncs(false, options.validate, false);
 
