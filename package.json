@@ -2,7 +2,7 @@
   "name": "md-links",
   "version": "0.1.0",
   "description": "Mardown Links CLI/LIB",
-  "main": "public/index.js",
+  "main": "./index.js",
   "license": "MIT",
   "scripts": {
     "test": "jest --coverage"
@@ -20,7 +20,7 @@
   "devDependencies": {
     "jest": "^26.1.0"
   },
-  "bin": "./index.js",
+  "bin": "./cli.js",
   "author": {
     "name": "Naere Loire Guimarães"
   }
