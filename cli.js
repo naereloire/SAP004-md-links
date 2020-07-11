@@ -9,7 +9,7 @@ let stats = false;
 program.version(pack.version);
 
 program
-  .command(" <path>")
+  .arguments(" <path>")
   .description("Scan md file")
   .option("-v, --validate", "Validate link")
   .option("-s, --stats", "Statical of links in md file")
