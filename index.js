@@ -8,19 +8,20 @@ let stats = false;
 
 const mdLinks = (path, options) => {
   return new Promise((resolve, reject) => {
-    if (somethingSuccesfulHappened) {
-      const successObject = {
-        msg: "Success",
-        data, //...some data we got back
-      };
-      resolve(successObject);
-    } else {
-      const errorObject = {
-        msg: "An error occured",
-        error, //...some error we got back
-      };
-      reject(errorObject);
-    }
+    const verify = new ObjectFuncs(false, options.validate, false);
+
+    verify.verifyPath(path).then((promiseList) => {
+      if (promiseList.length === 0) {
+        reject("Não foi possível ler o arquivo");
+      } else {
+        Promise.all(promiseList).then((promResolve) => {
+          let reduce = promResolve.reduce((accArrays, element) => {
+            return accArrays.concat(element);
+          }, []);
+          resolve(reduce);
+        });
+      }
+    });
   });
 };
 
@@ -39,12 +40,6 @@ program
       stats = true;
     }
     const verify = new ObjectFuncs(true, validate, stats);
-    verify.verifyPath(path).then((promiseList) => {
-      for (let prom of promiseList) {
-        prom.then((value) => {
-          // console.log(value);
-        });
-      }
-    });
+    verify.verifyPath(path);
   });
 program.parse(process.argv);

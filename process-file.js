@@ -226,7 +226,6 @@ function ObjectFn(isCli, validate, stats) {
             promiseResolve = [
               new Promise((resolve, reject) => {
                 fs.readFile(currentPath, "utf8", (err, data) => {
-                  // resolve(this.readArchive(err, data, currentPath, validate));
                   this.readArchive(err, data, currentPath, validate).then(
                     (arrayObject) => {
                       resolve(arrayObject);
@@ -236,6 +235,7 @@ function ObjectFn(isCli, validate, stats) {
               }),
             ];
           } else {
+            resolve([]);
             this.consoleCli("Arquivo não possui extensão markdown");
           }
         } else if (status.isDirectory()) {
