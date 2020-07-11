@@ -23,4 +23,5 @@ program
     const verify = new ObjectFuncs(true, validate, stats);
     verify.verifyPath(path);
   });
+// eslint-disable-next-line no-undef
 program.parse(process.argv);

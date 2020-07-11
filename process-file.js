@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
 const regexLinks = /\[[^\]]*\]\(http.*\)/g;
 const regexSplitLink = /^\[|\]\(|\)$/g;
 const fs = require("fs");

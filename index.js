@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-let testando;
 const ObjectFuncs = require("./process-file.js");
 
+// eslint-disable-next-line no-undef
 module.exports = mdLinks = (path, options) => {
   let validate = false;
   if (options) {
