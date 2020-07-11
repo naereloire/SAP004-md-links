@@ -38,7 +38,7 @@ program
     if (options.stats) {
       stats = true;
     }
-    const verify = new ObjectFuncs(validate, stats);
+    const verify = new ObjectFuncs(false, validate, stats);
     verify.verifyPath(path).then((promiseList) => {
       for (let prom of promiseList) {
         prom.then((value) => {
