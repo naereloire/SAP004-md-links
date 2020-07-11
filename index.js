@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-
+let testando;
 const ObjectFuncs = require("./process-file.js");
 
 module.exports = mdLinks = (path, options) => {
