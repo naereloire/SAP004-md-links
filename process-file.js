@@ -4,9 +4,23 @@ const fs = require("fs");
 const superagent = require("superagent");
 let brokenLinks = 0;
 
-function ObjectFn(validate, stats) {
+function ObjectFn(isCli, validate, stats) {
+  this.isCli = isCli;
   this.validate = validate;
   this.stats = stats;
+
+  /**
+   * Função
+   * @param {}
+   * @param {}
+   * @returns
+   */
+  this.consoleCli = (menssage) => {
+    if (isCli) {
+      console.log(menssage);
+    }
+  };
+
   /**
    * Função
    * @param {}
@@ -31,12 +45,14 @@ function ObjectFn(validate, stats) {
         return arrayLinks.find((a) => a.href === href);
       }
     );
-    console.log(`Total:${arrayLinks.length} \nUnique:${uniqueLinks.length}`);
+    this.consoleCli(
+      `Total:${arrayLinks.length} \nUnique:${uniqueLinks.length}`
+    );
     if (this.validate) {
       this.processArray(arrayLinks, (element) => {
         return this.validateLink(element, false);
       }).then(() => {
-        console.log(`Broken:${brokenLinks}`);
+        this.consoleCli(`Broken:${brokenLinks}`);
       });
     }
   };
@@ -52,7 +68,7 @@ function ObjectFn(validate, stats) {
       .get(link)
       .then((res) => {
         if (printValidate) {
-          console.log(
+          this.consoleCli(
             `${objectLink.path} ${objectLink.href} ${res.ok ? "ok" : "fail"}  
             ${res.statusCode}  ${objectLink.text}`
           );
@@ -61,7 +77,7 @@ function ObjectFn(validate, stats) {
       .catch((error) => {
         brokenLinks += 1;
         if (printValidate) {
-          console.log(
+          this.consoleCli(
             `${objectLink.path} ${objectLink.href} 
             ${error.response.ok ? "ok" : "fail"}  
             ${error.response.statusCode}  ${objectLink.text}`
@@ -101,7 +117,7 @@ function ObjectFn(validate, stats) {
    * @param {}
    * @returns
    */
-  this.readDirectory = (err, files, currentPath) => {
+  this.findFilesDirectory = (err, files, currentPath) => {
     if (err) throw err;
     if (!currentPath.endsWith("/")) {
       currentPath += "/";
@@ -109,16 +125,28 @@ function ObjectFn(validate, stats) {
     const filterDir = files.filter((element) => {
       return element.includes(".md");
     });
+    return filterDir;
+  };
+
+  this.readMultipleFiles = (filterDir, currentPath) => {
+    let promisesArray = [];
     if (!filterDir) {
-      console.log("Diretório não possui arquivos com extensão md");
+      this.consoleCli("Diretório não possui arquivos com extensão md");
+      return [];
     } else {
       for (const element of filterDir) {
-        fs.readFile(currentPath + element, "utf8", (err, data) => {
-          this.readArchive(err, data, currentPath + element);
-        });
+        promisesArray.push(
+          new Promise((resolve, reject) => {
+            fs.readFile(currentPath + element, "utf8", (err, data) => {
+              resolve(this.readArchive(err, data, currentPath + element));
+            });
+          })
+        );
       }
+      return promisesArray;
     }
   };
+
   /**
    * Função
    * @param {}
@@ -130,7 +158,6 @@ function ObjectFn(validate, stats) {
     if (err) {
       throw err;
     }
-
     const findLinkReturn = this.findLink(data, path);
     if (this.stats) {
       this.statsLink(findLinkReturn);
@@ -139,39 +166,51 @@ function ObjectFn(validate, stats) {
         if (this.validate) {
           this.validateLink(element);
         } else {
-          console.log(`${path} ${element.href} ${element.text}`);
+          this.consoleCli(`${path} ${element.href} ${element.text}`);
         }
       }
     }
+    return findLinkReturn;
   };
   /**
    * Função que verificar se o caminho passado é um diretório ou um arquivo, acioando a função para o caminho correspondente.
    * @param {String} currentPath Nome do caminho.
    */
   this.verifyPath = (currentPath) => {
-    let objectLink;
-    let sucess;
-    fs.stat(currentPath, (err, status) => {
-      if (err) {
-        throw err;
-      }
-      if (status.isFile()) {
-        if (currentPath.includes(".md")) {
-          fs.readFile(currentPath, "utf8", (err, data) => {
-            this.readArchive(err, data, currentPath, validate);
-          });
-        } else {
-          console.log("Arquivo não possui extensão markdown");
+    let promisesReturn = new Promise((resolve, reject) => {
+      let promiseResolve;
+      fs.stat(currentPath, (err, status) => {
+        if (err) {
+          throw err;
         }
-      } else if (status.isDirectory()) {
-        fs.readdir(currentPath, (err, data) => {
-          this.readDirectory(err, data, currentPath);
-        });
-      }
+        if (status.isFile()) {
+          if (currentPath.includes(".md")) {
+            promiseResolve = [
+              new Promise((resolve, reject) => {
+                fs.readFile(currentPath, "utf8", (err, data) => {
+                  resolve(this.readArchive(err, data, currentPath, validate));
+                });
+              }),
+            ];
+          } else {
+            this.consoleCli("Arquivo não possui extensão markdown");
+          }
+        } else if (status.isDirectory()) {
+          promiseResolve = new Promise((resolve, reject) => {
+            new Promise((resolve, reject) => {
+              fs.readdir(currentPath, (err, data) => {
+                let filterDir = this.findFilesDirectory(err, data, currentPath);
+                resolve(filterDir);
+              });
+            }).then((filterDir) => {
+              resolve(this.readMultipleFiles(filterDir, currentPath));
+            });
+          });
+        }
+        resolve(promiseResolve);
+      });
     });
-    // .then(() => {
-    //   return { obLinks: objectLink, status: sucess };
-    // });
+    return promisesReturn;
   };
 }
 module.exports = ObjectFn;

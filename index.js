@@ -32,21 +32,19 @@ program
   .option("-v, --validate", "Validate link")
   .option("-s, --stats", "Statical of links in md file")
   .action((path, options) => {
-    switch (true) {
-      case options.validate && options.stats:
-        validate = true;
-        stats = true;
-        break;
-      case options.validate:
-        validate = true;
-        break;
-      case options.stats:
-        stats = true;
-        break;
-      default:
-        console.log(path + " não deu options");
+    if (options.validate) {
+      validate = true;
+    }
+    if (options.stats) {
+      stats = true;
     }
     const verify = new ObjectFuncs(validate, stats);
-    verify.verifyPath(path);
+    verify.verifyPath(path).then((promiseList) => {
+      for (let prom of promiseList) {
+        prom.then((value) => {
+          console.log(value);
+        });
+      }
+    });
   });
 program.parse(process.argv);
