@@ -28,9 +28,13 @@ function ObjectFn(isCli, validate, stats) {
    * @returns
    */
   this.processArray = (array, fn) => {
+    var results = [];
     return array.reduce(function (p, item) {
       return p.then(function () {
-        return fn(item);
+        return fn(item).then(function (data) {
+          results.push(data);
+          return results;
+        });
       });
     }, Promise.resolve());
   };
@@ -45,15 +49,19 @@ function ObjectFn(isCli, validate, stats) {
         return arrayLinks.find((a) => a.href === href);
       }
     );
-    this.consoleCli(
-      `Total:${arrayLinks.length} \nUnique:${uniqueLinks.length}`
-    );
     if (this.validate) {
       this.processArray(arrayLinks, (element) => {
         return this.validateLink(element, false);
       }).then(() => {
+        this.consoleCli(
+          `Total:${arrayLinks.length} \nUnique:${uniqueLinks.length}`
+        );
         this.consoleCli(`Broken:${brokenLinks}`);
       });
+    } else {
+      this.consoleCli(
+        `Total:${arrayLinks.length} \nUnique:${uniqueLinks.length}`
+      );
     }
   };
   /**
@@ -64,27 +72,34 @@ function ObjectFn(isCli, validate, stats) {
    */
   this.validateLink = (objectLink, printValidate = true) => {
     link = objectLink.href;
-    return superagent
-      .get(link)
-      .then((res) => {
-        if (printValidate) {
-          this.consoleCli(
-            `${objectLink.path} ${objectLink.href} ${res.ok ? "ok" : "fail"}  
-            ${res.statusCode}  ${objectLink.text}`
-          );
-        }
-      })
-      .catch((error) => {
-        brokenLinks += 1;
-        if (printValidate) {
-          this.consoleCli(
-            `${objectLink.path} ${objectLink.href} 
-            ${error.response.ok ? "ok" : "fail"}  
-            ${error.response.statusCode}  ${objectLink.text}`
-          );
-        }
-      });
-    //
+    return new Promise((resolve, reject) => {
+      superagent
+        .get(link)
+        .then((res) => {
+          if (printValidate) {
+            this.consoleCli(
+              `${objectLink.path} ${objectLink.href} ${res.ok ? "ok" : "fail"}  
+              ${res.statusCode}  ${objectLink.text}`
+            );
+          }
+          objectLink.status = res.statusCode;
+          objectLink.ok = res.ok ? "ok" : "fail";
+          resolve(objectLink);
+        })
+        .catch((error) => {
+          brokenLinks += 1;
+          if (printValidate) {
+            this.consoleCli(
+              `${objectLink.path} ${objectLink.href} 
+              ${error.response.ok ? "ok" : "fail"}  
+              ${error.response.statusCode}  ${objectLink.text}`
+            );
+          }
+          objectLink.status = error.response.statusCode;
+          objectLink.ok = error.response.ok ? "ok" : "fail";
+          resolve(objectLink);
+        });
+    });
   };
   /**
    * Função cria array de objetos de links, utilizando expressão regular para indentificar links.
@@ -138,7 +153,11 @@ function ObjectFn(isCli, validate, stats) {
         promisesArray.push(
           new Promise((resolve, reject) => {
             fs.readFile(currentPath + element, "utf8", (err, data) => {
-              resolve(this.readArchive(err, data, currentPath + element));
+              this.readArchive(err, data, currentPath + element).then(
+                (arrayObject) => {
+                  resolve(arrayObject);
+                }
+              );
             });
           })
         );
@@ -159,18 +178,26 @@ function ObjectFn(isCli, validate, stats) {
       throw err;
     }
     const findLinkReturn = this.findLink(data, path);
-    if (this.stats) {
-      this.statsLink(findLinkReturn);
-    } else {
-      for (const element of findLinkReturn) {
+    return new Promise((resolve, reject) => {
+      let newArrayObjectLinks = [];
+      if (this.stats) {
+        this.statsLink(findLinkReturn);
+      } else {
         if (this.validate) {
-          this.validateLink(element);
+          this.processArray(findLinkReturn, (element) => {
+            return this.validateLink(element, false);
+          }).then((objArray) => {
+            resolve(objArray);
+          });
         } else {
-          this.consoleCli(`${path} ${element.href} ${element.text}`);
+          for (const element of findLinkReturn) {
+            newArrayObjectLinks.push(element);
+            this.consoleCli(`${path} ${element.href} ${element.text}`);
+          }
+          resolve(newArrayObjectLinks);
         }
       }
-    }
-    return findLinkReturn;
+    });
   };
   /**
    * Função que verificar se o caminho passado é um diretório ou um arquivo, acioando a função para o caminho correspondente.
@@ -188,7 +215,12 @@ function ObjectFn(isCli, validate, stats) {
             promiseResolve = [
               new Promise((resolve, reject) => {
                 fs.readFile(currentPath, "utf8", (err, data) => {
-                  resolve(this.readArchive(err, data, currentPath, validate));
+                  // resolve(this.readArchive(err, data, currentPath, validate));
+                  this.readArchive(err, data, currentPath, validate).then(
+                    (arrayObject) => {
+                      resolve(arrayObject);
+                    }
+                  );
                 });
               }),
             ];
