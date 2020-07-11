@@ -42,7 +42,7 @@ program
     verify.verifyPath(path).then((promiseList) => {
       for (let prom of promiseList) {
         prom.then((value) => {
-          console.log(value);
+          // console.log(value);
         });
       }
     });

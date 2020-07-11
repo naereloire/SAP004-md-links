@@ -43,7 +43,7 @@ function ObjectFn(isCli, validate, stats) {
    * @param {}
    * @returns
    */
-  this.statsLink = (arrayLinks) => {
+  this.statsLink = (arrayLinks, currentPath) => {
     const uniqueLinks = Array.from(new Set(arrayLinks.map((a) => a.href))).map(
       (href) => {
         return arrayLinks.find((a) => a.href === href);
@@ -53,12 +53,14 @@ function ObjectFn(isCli, validate, stats) {
       this.processArray(arrayLinks, (element) => {
         return this.validateLink(element, false);
       }).then(() => {
+        this.consoleCli(currentPath);
         this.consoleCli(
           `Total:${arrayLinks.length} \nUnique:${uniqueLinks.length}`
         );
         this.consoleCli(`Broken:${brokenLinks}`);
       });
     } else {
+      this.consoleCli(currentPath);
       this.consoleCli(
         `Total:${arrayLinks.length} \nUnique:${uniqueLinks.length}`
       );
@@ -78,8 +80,13 @@ function ObjectFn(isCli, validate, stats) {
         .then((res) => {
           if (printValidate) {
             this.consoleCli(
-              `${objectLink.path} ${objectLink.href} ${res.ok ? "ok" : "fail"}  
-              ${res.statusCode}  ${objectLink.text}`
+              [
+                objectLink.path,
+                objectLink.href,
+                res.ok ? "ok" : "fail",
+                res.statusCode,
+                objectLink.text,
+              ].join(" ")
             );
           }
           objectLink.status = res.statusCode;
@@ -90,9 +97,13 @@ function ObjectFn(isCli, validate, stats) {
           brokenLinks += 1;
           if (printValidate) {
             this.consoleCli(
-              `${objectLink.path} ${objectLink.href} 
-              ${error.response.ok ? "ok" : "fail"}  
-              ${error.response.statusCode}  ${objectLink.text}`
+              [
+                objectLink.path,
+                objectLink.href,
+                error.response.ok ? "ok" : "fail",
+                error.response.statusCode,
+                objectLink.text,
+              ].join(" ")
             );
           }
           objectLink.status = error.response.statusCode;
@@ -181,11 +192,11 @@ function ObjectFn(isCli, validate, stats) {
     return new Promise((resolve, reject) => {
       let newArrayObjectLinks = [];
       if (this.stats) {
-        this.statsLink(findLinkReturn);
+        this.statsLink(findLinkReturn, path);
       } else {
         if (this.validate) {
           this.processArray(findLinkReturn, (element) => {
-            return this.validateLink(element, false);
+            return this.validateLink(element, true);
           }).then((objArray) => {
             resolve(objArray);
           });
