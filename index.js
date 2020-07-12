@@ -1,8 +1,13 @@
 #!/usr/bin/env node
 const ObjectFuncs = require("./process-file.js");
 
-// eslint-disable-next-line no-undef
-module.exports = mdLinks = (path, options) => {
+/**
+ * Função
+ * @param {}
+ * @param {}
+ * @returns
+ */
+const mdLinks = (path, options) => {
   let validate = false;
   if (options) {
     validate = options.validate;
@@ -24,3 +29,4 @@ module.exports = mdLinks = (path, options) => {
     });
   });
 };
+module.exports = mdLinks;
