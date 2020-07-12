@@ -1,11 +1,16 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable no-undef */
 const regexLinks = /\[[^\]]*\]\(http.*\)/g;
 const regexSplitLink = /^\[|\]\(|\)$/g;
 const fs = require("fs");
 const superagent = require("superagent");
 let brokenLinks = 0;
 
+/**
+ * Construtor
+ * @param {} isCli
+ * @param {} validate
+ * @param {} stats
+ */
 function ObjectFn(isCli, validate, stats) {
   this.isCli = isCli;
   this.validate = validate;
@@ -17,7 +22,7 @@ function ObjectFn(isCli, validate, stats) {
     }
   };
   /**
-   * Função
+   * Função que aplica callback de função assíncrona sequencialmente.
    * @param {Array.<Object>} array Lista de obejetos(ex:Links de um arquivo .md)
    * @param {Function} fn Função callback, que será executada no itém.
    * @returns {Array.<Object>} Um array de objetos tratado de acordo a função callback.
@@ -36,8 +41,7 @@ function ObjectFn(isCli, validate, stats) {
   /**
    * Função realiza verificações estatísticas, no array de objetos de links (ex: total de links,links quebrados e únicos.)
    * @param {Array.<Object>} arrayLinks
-   * * @param {String} currentPath
-   *
+   * @param {String} currentPath
    */
   this.statsLink = (arrayLinks, currentPath) => {
     const uniqueLinks = Array.from(new Set(arrayLinks.map((a) => a.href))).map(
@@ -66,9 +70,10 @@ function ObjectFn(isCli, validate, stats) {
    * Função realiza validação de status do link, com a opção de mostrar no console.
    * @param {Object} objectLink Objeto de links.
    * @param {Boolean} printValidate Flag que indica se o status deve ou não ser mostrado no console.
+   * @returns {Promise} Que resolve um novo array de objetos, adicionando novas keys de validação.
    */
   this.validateLink = (objectLink, printValidate = true) => {
-    link = objectLink.href;
+    let link = objectLink.href;
     return new Promise((resolve, reject) => {
       superagent
         .get(link)
@@ -111,7 +116,7 @@ function ObjectFn(isCli, validate, stats) {
    * Função cria array de objetos de links, utilizando expressão regular para indentificar links.
    * @param {String} data Contém todo o conteúdo do arquivo markdown.
    * @param {String} path Nome do arquivo markdown.
-   * @returns Array de obejtos de links, contendo path, text e href como keys.
+   * @returns {Array.<Object>} Lista de obejtos de links, contendo path, text e href como keys.
    */
   this.findLink = (data, path) => {
     const arrayLinks = data.match(regexLinks);
@@ -132,11 +137,11 @@ function ObjectFn(isCli, validate, stats) {
     return arrayObjectLinks;
   };
   /**
-   * Função
-   * @param {}
-   * @param {}
-   * @param {}
-   * @returns
+   * Função busca arquivos com extensão Markdown, no diretório fornecido.
+   * @param {Error} err Erro capturado pela função fs.readdir.
+   * @param {Array.<String>} files Lista de arquivos encontrados no diretório.
+   * @param {String} currentPath Nome do diretório.
+   * @returns {Array.<String>} Array de arquivos filtrados com extão Markdown.
    */
   this.findFilesDirectory = (err, files, currentPath) => {
     if (err) throw err;
@@ -148,7 +153,12 @@ function ObjectFn(isCli, validate, stats) {
     });
     return filterDir;
   };
-
+  /**
+   * Função realiza leitura dos arquivos com extensão markdown.
+   * @param {Array.<String>} filterDir Array de arquivos filtrados com extão Markdown.
+   * @param {String} currentPath Nome do diretório.
+   * @returns {Promises} Array de promises, que resolve o array de objetos de links de cada arquivo.
+   */
   this.readMultipleFiles = (filterDir, currentPath) => {
     let promisesArray = [];
     if (!filterDir) {
@@ -173,11 +183,11 @@ function ObjectFn(isCli, validate, stats) {
   };
 
   /**
-   * Função
-   * @param {}
-   * @param {}
-   * @param {}
-   * @returns
+   * realiza leitura de um arquivo com extensão markdown.
+   * @param {Error} err Erro capturado pela função fs.readfile.
+   * @param {String} data Conteúdo encontrado no arquivo markdown.
+   * @param {String} path Caminho com o nome do arquivo.
+   * @returns {Promise} Que resolve o array de objetos de links.
    */
   this.readArchive = (err, data, path) => {
     if (err) {
@@ -206,8 +216,9 @@ function ObjectFn(isCli, validate, stats) {
     });
   };
   /**
-   * Função que verificar se o caminho passado é um diretório ou um arquivo, acioando a função para o caminho correspondente.
+   * Função que verificar se o caminho passado é um diretório ou um arquivo, acionando a função para o caminho correspondente.
    * @param {String} currentPath Nome do caminho.
+   * @returns {Promise} Resolve um array de promises.
    */
   this.verifyPath = (currentPath) => {
     let promisesReturn = new Promise((resolve, reject) => {
