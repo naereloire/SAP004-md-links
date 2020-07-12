@@ -34,9 +34,10 @@ function ObjectFn(isCli, validate, stats) {
     }, Promise.resolve());
   };
   /**
-   * Função
-   * @param {}
-   * @returns
+   * Função realiza verificações estatísticas, no array de objetos de links (ex: total de links,links quebrados e únicos.)
+   * @param {Array.<Object>} arrayLinks
+   * * @param {String} currentPath
+   *
    */
   this.statsLink = (arrayLinks, currentPath) => {
     const uniqueLinks = Array.from(new Set(arrayLinks.map((a) => a.href))).map(
