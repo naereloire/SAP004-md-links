@@ -1,8 +1,12 @@
 /* eslint-disable no-undef */
-const { findLink } = require("../process-file.js");
+const mdLinks = require("../index.js");
+const path = "./test.md";
 
-describe("findLinks", () => {
+describe("mdLinks", () => {
   it("is a function", () => {
-    expect(typeof findLink).toBe("function");
+    expect(typeof mdLinks).toBe("function");
+  });
+  it("Deveria criar um array de objetos e retorna-lo em uma promise", () => {
+    expect(mdLinks(path));
   });
 });
