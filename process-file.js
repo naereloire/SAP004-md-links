@@ -5,12 +5,6 @@ const fs = require("fs");
 const superagent = require("superagent");
 let brokenLinks = 0;
 
-/**
- * Construtor
- * @param {} isCli
- * @param {} validate
- * @param {} stats
- */
 function ObjectFn(isCli, validate, stats) {
   this.isCli = isCli;
   this.validate = validate;
