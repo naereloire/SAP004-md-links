@@ -63,10 +63,9 @@ function ObjectFn(isCli, validate, stats) {
     }
   };
   /**
-   * Função
-   * @param {}
-   * @param {}
-   * @returns
+   * Função realiza validação de status do link, com a opção de mostrar no console.
+   * @param {Object} objectLink Objeto de links.
+   * @param {Boolean} printValidate Flag que indica se o status deve ou não ser mostrado no console.
    */
   this.validateLink = (objectLink, printValidate = true) => {
     link = objectLink.href;
