@@ -5,7 +5,7 @@ const ObjectFuncs = require("./process-file.js");
  * Função verifica arquivos com extensão Markdown (.md), indentifica links com a opção de valida-los.
  * @param {String} path Nome do diretório ou arquivo.
  * @param {Object} options Objeto contendo a key validade, que pode ser true ou false.
- * @returns Retorna uma promisse contendo um array de objetos de links.
+ * @returns {Promise} Retorna uma promisse contendo um array de objetos de links.
  */
 const mdLinks = (path, options) => {
   let validate = false;

@@ -11,23 +11,16 @@ function ObjectFn(isCli, validate, stats) {
   this.validate = validate;
   this.stats = stats;
 
-  /**
-   * Função
-   * @param {}
-   * @param {}
-   * @returns
-   */
   this.consoleCli = (menssage) => {
     if (isCli) {
       console.log(menssage);
     }
   };
-
   /**
    * Função
-   * @param {}
-   * @param {}
-   * @returns
+   * @param {Array.<Object>} array Lista de obejetos(ex:Links de um arquivo .md)
+   * @param {Function} fn Função callback, que será executada no itém.
+   * @returns {Array.<Object>} Um array de objetos tratado de acordo a função callback.
    */
   this.processArray = (array, fn) => {
     var results = [];
