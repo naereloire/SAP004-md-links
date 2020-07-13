@@ -4,6 +4,7 @@ const regexSplitLink = /^\[|\]\(|\)$/g;
 const fs = require("fs");
 const superagent = require("superagent");
 const chalk = require("chalk");
+const Table = require("cli-table");
 let brokenLinks = 0;
 
 function ObjectFn(isCli, validate, stats) {
@@ -13,7 +14,11 @@ function ObjectFn(isCli, validate, stats) {
 
   this.consoleCli = (menssage, fnChalk) => {
     if (isCli) {
-      console.log(fnChalk(menssage));
+      if (fnChalk) {
+        console.log(fnChalk(menssage));
+      } else {
+        console.log(menssage);
+      }
     }
   };
   /**
@@ -49,11 +54,19 @@ function ObjectFn(isCli, validate, stats) {
         return this.validateLink(element, false);
       }).then(() => {
         this.consoleCli(currentPath, chalk.green);
-        this.consoleCli(
-          `Total:${arrayLinks.length} \nUnique:${uniqueLinks.length}`,
-          chalk.yellow
-        );
-        this.consoleCli(`Broken:${brokenLinks}`, chalk.red);
+        let table = new Table({
+          head: [
+            chalk.gray("Total"),
+            chalk.gray("Unique"),
+            chalk.gray("Broken"),
+          ],
+        });
+        table.push([
+          chalk.green(arrayLinks.length),
+          chalk.green(uniqueLinks.length),
+          chalk.red(brokenLinks),
+        ]);
+        this.consoleCli(table.toString());
       });
     } else {
       this.consoleCli(currentPath, chalk.green);
