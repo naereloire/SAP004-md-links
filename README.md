@@ -100,9 +100,9 @@ Execute fornecendo os argumentos:
 >   Caminho do diretório ou arquivo, relativou ou absoluto.
 > - `options`
 >   Flags de validação e estatística, opicionais:
-> - - `--validate.`
-> - - `--stats.`
-> - - `--validate` e `--stats.`
+> - `--validate.`
+> - `--stats.`
+> - `--validate` e `--stats.`
 
 ##### Exemplo:
 
