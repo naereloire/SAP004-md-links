@@ -99,7 +99,7 @@ Execute fornecendo os argumentos:
 > * `path`
 > Caminho do diretório ou arquivo, relativou ou absoluto.
 > * `options`
-> Flags de validação estatística, opicionais:
+> Flags de validação e estatística, opicionais:
 > `--validate.`
 > `--stats.`
 > `--validate` e `--stats.`
