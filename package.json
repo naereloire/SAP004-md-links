@@ -14,7 +14,6 @@
     "cli-table": "^0.3.1",
     "commander": "^5.1.0",
     "figlet": "^1.4.0",
-    "inquirer": "^7.3.0",
     "prettier": "^2.0.5",
     "shelljs": "^0.8.4",
     "superagent": "^5.3.1"

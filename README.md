@@ -206,6 +206,7 @@ npm run pretest
 <p align="center">
 Esse projeto faz parte do currículo do <a href="https://www.laboratoria.la/br">Bootcamp da Laboratória Brasil</a>
 </p>
+
 <p align="center">
 Desenvolvimento <a href="https://github.com/naereloire">Naere Loire</a> :octocat:
 </p>

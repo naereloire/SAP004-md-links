@@ -3,6 +3,7 @@ const regexLinks = /\[[^\]]*\]\(http.*\)/g;
 const regexSplitLink = /^\[|\]\(|\)$/g;
 const fs = require("fs");
 const superagent = require("superagent");
+const chalk = require("chalk");
 let brokenLinks = 0;
 
 function ObjectFn(isCli, validate, stats) {
@@ -10,9 +11,9 @@ function ObjectFn(isCli, validate, stats) {
   this.validate = validate;
   this.stats = stats;
 
-  this.consoleCli = (menssage) => {
+  this.consoleCli = (menssage, fnChalk) => {
     if (isCli) {
-      console.log(menssage);
+      console.log(fnChalk(menssage));
     }
   };
   /**
@@ -47,16 +48,18 @@ function ObjectFn(isCli, validate, stats) {
       this.processArray(arrayLinks, (element) => {
         return this.validateLink(element, false);
       }).then(() => {
-        this.consoleCli(currentPath);
+        this.consoleCli(currentPath, chalk.green);
         this.consoleCli(
-          `Total:${arrayLinks.length} \nUnique:${uniqueLinks.length}`
+          `Total:${arrayLinks.length} \nUnique:${uniqueLinks.length}`,
+          chalk.yellow
         );
-        this.consoleCli(`Broken:${brokenLinks}`);
+        this.consoleCli(`Broken:${brokenLinks}`, chalk.red);
       });
     } else {
-      this.consoleCli(currentPath);
+      this.consoleCli(currentPath, chalk.green);
       this.consoleCli(
-        `Total:${arrayLinks.length} \nUnique:${uniqueLinks.length}`
+        `Total:${arrayLinks.length} \nUnique:${uniqueLinks.length}`,
+        chalk.yellow
       );
     }
   };
@@ -80,7 +83,8 @@ function ObjectFn(isCli, validate, stats) {
                 res.ok ? "ok" : "fail",
                 res.statusCode,
                 objectLink.text,
-              ].join(" ")
+              ].join(" "),
+              chalk.green
             );
           }
           objectLink.status = res.statusCode;
@@ -97,7 +101,8 @@ function ObjectFn(isCli, validate, stats) {
                 error.response.ok ? "ok" : "fail",
                 error.response.statusCode,
                 objectLink.text,
-              ].join(" ")
+              ].join(" "),
+              chalk.red
             );
           }
           objectLink.status = error.response.statusCode;
@@ -156,7 +161,10 @@ function ObjectFn(isCli, validate, stats) {
   this.readMultipleFiles = (filterDir, currentPath) => {
     let promisesArray = [];
     if (!filterDir) {
-      this.consoleCli("Diretório não possui arquivos com extensão md");
+      this.consoleCli(
+        "Diretório não possui arquivos com extensão md",
+        chalk.red
+      );
       return [];
     } else {
       for (const element of filterDir) {
@@ -202,7 +210,10 @@ function ObjectFn(isCli, validate, stats) {
         } else {
           for (const element of findLinkReturn) {
             newArrayObjectLinks.push(element);
-            this.consoleCli(`${path} ${element.href} ${element.text}`);
+            this.consoleCli(
+              `${path} ${element.href} ${element.text}`,
+              chalk.green
+            );
           }
           resolve(newArrayObjectLinks);
         }
@@ -236,7 +247,7 @@ function ObjectFn(isCli, validate, stats) {
             ];
           } else {
             resolve([]);
-            this.consoleCli("Arquivo não possui extensão markdown");
+            this.consoleCli("Arquivo não possui extensão markdown", chalk.red);
           }
         } else if (status.isDirectory()) {
           promiseResolve = new Promise((resolve, reject) => {
