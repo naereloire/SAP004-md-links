@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* global process */
 
 const ObjectFuncs = require("./process-file.js");
 const program = require("commander");
@@ -23,5 +24,5 @@ program
     const verify = new ObjectFuncs(true, validate, stats);
     verify.verifyPath(path);
   });
-// eslint-disable-next-line no-undef
+
 program.parse(process.argv);

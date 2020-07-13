@@ -1,8 +1,16 @@
 #!/usr/bin/env node
 const ObjectFuncs = require("./process-file.js");
 
-// eslint-disable-next-line no-undef
-module.exports = mdLinks = (path, options) => {
+/**
+ * Função verifica arquivos com extensão Markdown (.md), indentificando links com a opção de valida-los.
+ * @param {String} path Nome do diretório ou arquivo.
+ * @param {Object} options Objeto contendo a key validade, que pode ser true ou false.
+ * @returns {Promise} Retorna uma promisse contendo um array de objetos de links.
+ */
+const mdLinks = (path, options) => {
+  if (!path) {
+    throw new TypeError("parâmetro invalido");
+  }
   let validate = false;
   if (options) {
     validate = options.validate;
@@ -24,3 +32,4 @@ module.exports = mdLinks = (path, options) => {
     });
   });
 };
+module.exports = mdLinks;
