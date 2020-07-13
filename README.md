@@ -150,11 +150,9 @@ Para acessar documentação.
  * Lib [commander](https://github.com/tj/commander.js/) para desenvolvimento da CLI(Command Line Interface).
  * Lib [superagent](https://github.com/visionmedia/superagent) para requisição via HTTP client
 
-<center>
-
+<p align="center">
 <img src="https://media.giphy.com/media/11BbGyhVmk4iLS/giphy.gif" width="200" heigth="200"> 
-
-</center>
+</p>
 
 * [Clone](https://help.github.com/articles/cloning-a-repository/) o projeto na sua máquina executando o seguinte comando no seu terminal:
 
