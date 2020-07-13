@@ -32,7 +32,7 @@ Conjuto de funções pré-compiladas, disponíveis para utilização no código.
 
 - [Node.js](https://nodejs.org/) que contém o [npm](https://docs.npmjs.com/) para instalação das dependências.
 
-Instale executando:
+:rocket:Instale executando:
 
 ```sh
 npm install naereloire/md-links
