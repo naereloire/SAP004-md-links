@@ -76,7 +76,7 @@ describe("mdLinks", () => {
     );
   });
 
-  it("should throw TypeError when invoked with wrong argument types", () => {
+  test("should throw TypeError when invoked with wrong argument types", () => {
     expect(() => mdLinks()).toThrow(TypeError);
     expect(() => mdLinks(0, {})).toThrow(TypeError);
   });
