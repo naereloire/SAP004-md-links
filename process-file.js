@@ -53,12 +53,12 @@ function ObjectFn(isCli, validate, stats) {
       this.processArray(arrayLinks, (element) => {
         return this.validateLink(element, false);
       }).then(() => {
-        this.consoleCli(currentPath, chalk.green);
+        this.consoleCli(currentPath);
         let table = new Table({
           head: [
-            chalk.gray("Total"),
-            chalk.gray("Unique"),
-            chalk.gray("Broken"),
+            chalk.magentaBright("Total"),
+            chalk.magentaBright("Unique"),
+            chalk.magentaBright("Broken"),
           ],
         });
         table.push([
@@ -70,10 +70,14 @@ function ObjectFn(isCli, validate, stats) {
       });
     } else {
       this.consoleCli(currentPath, chalk.green);
-      this.consoleCli(
-        `Total:${arrayLinks.length} \nUnique:${uniqueLinks.length}`,
-        chalk.yellow
-      );
+      let table = new Table({
+        head: [chalk.magentaBright("Total"), chalk.magentaBright("Unique")],
+      });
+      table.push([
+        chalk.yellow(arrayLinks.length),
+        chalk.yellow(uniqueLinks.length),
+      ]);
+      this.consoleCli(table.toString());
     }
   };
   /**
