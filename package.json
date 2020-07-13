@@ -1,5 +1,5 @@
 {
-  "name": "md-links",
+  "name": "@naereloire/md-links",
   "version": "0.1.0",
   "description": "Mardown Links CLI/LIB",
   "main": "./index.js",
@@ -23,6 +23,9 @@
     "jest": "^26.1.0"
   },
   "bin": "./cli.js",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "author": {
     "name": "Naere Loire Guimarães"
   }
