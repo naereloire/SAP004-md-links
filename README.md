@@ -18,7 +18,7 @@
 
 Arquivos `Markdown` podem conter links, tabelas, imagens etc.
 
-O objetivo da ferramenta `md links` é, indentificar arquivos que contenham extensão markdown (.md), podendo ainda realizar validações e gerar estatísticas simples como quantidade total de links nos arquivos, links únicos e quebrados.
+O objetivo da ferramenta `md links` é, localizar links em arquivos com extensão markdown (.md), podendo ainda realizar validações e gerar estatísticas simples como quantidade total de links nos arquivos, links únicos e quebrados. 
 
 Foram desevolvidas duas formas de implementação, `LIB` (library) e `CLI` (Command Line Interface).
 
