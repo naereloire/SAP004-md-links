@@ -8,6 +8,9 @@ const ObjectFuncs = require("./process-file.js");
  * @returns {Promise} Retorna uma promisse contendo um array de objetos de links.
  */
 const mdLinks = (path, options) => {
+  if (!path) {
+    throw new TypeError("parâmetro invalido");
+  }
   let validate = false;
   if (options) {
     validate = options.validate;

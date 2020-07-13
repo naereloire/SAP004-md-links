@@ -1,7 +1,8 @@
 /* eslint-disable no-undef */
 const mdLinks = require("../index.js");
-const path = "./test/test.md";
 
+const path = "./test/test.md";
+const directoryEmpty = "./test/no_files_md";
 const expectArray = [
   {
     path: "./test/test.md",
@@ -24,7 +25,6 @@ const expectArray = [
     href: "https://github.com/stevekane/promise-it-wont-hurt",
   },
 ];
-
 const expectArrayValidate = [
   {
     path: "./test/test.md",
@@ -57,16 +57,27 @@ const expectArrayValidate = [
 ];
 
 describe("mdLinks", () => {
-  it("is a function", () => {
+  test("is a function", () => {
     expect(typeof mdLinks).toBe("function");
   });
 
-  test("Deveria criar um array de objetos e retorna-lo em uma promise", () => {
+  test("should create an array of objects and return it in a promise", () => {
     return expect(mdLinks(path)).resolves.toStrictEqual(expectArray);
   });
-  it("Deveria retornar um array de objetos de links, com status", () => {
+  test("should return an array of link objects, with status", () => {
     return expect(mdLinks(path, { validate: true })).resolves.toStrictEqual(
       expectArrayValidate
     );
+  });
+
+  test("should throw TypeError when there isn't md files in directory", () => {
+    expect(() => mdLinks(directoryEmpty)).rejects.toMatch(
+      "Não foi possível ler o arquivo"
+    );
+  });
+
+  it("should throw TypeError when invoked with wrong argument types", () => {
+    expect(() => mdLinks()).toThrow(TypeError);
+    expect(() => mdLinks(0, {})).toThrow(TypeError);
   });
 });
