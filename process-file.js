@@ -3,6 +3,8 @@ const regexLinks = /\[[^\]]*\]\(http.*\)/g;
 const regexSplitLink = /^\[|\]\(|\)$/g;
 const fs = require("fs");
 const superagent = require("superagent");
+const chalk = require("chalk");
+const Table = require("cli-table");
 let brokenLinks = 0;
 
 function ObjectFn(isCli, validate, stats) {
@@ -10,9 +12,13 @@ function ObjectFn(isCli, validate, stats) {
   this.validate = validate;
   this.stats = stats;
 
-  this.consoleCli = (menssage) => {
+  this.consoleCli = (menssage, fnChalk) => {
     if (isCli) {
-      console.log(menssage);
+      if (fnChalk) {
+        console.log(fnChalk(menssage));
+      } else {
+        console.log(menssage);
+      }
     }
   };
   /**
@@ -48,16 +54,30 @@ function ObjectFn(isCli, validate, stats) {
         return this.validateLink(element, false);
       }).then(() => {
         this.consoleCli(currentPath);
-        this.consoleCli(
-          `Total:${arrayLinks.length} \nUnique:${uniqueLinks.length}`
-        );
-        this.consoleCli(`Broken:${brokenLinks}`);
+        let table = new Table({
+          head: [
+            chalk.magentaBright("Total"),
+            chalk.magentaBright("Unique"),
+            chalk.magentaBright("Broken"),
+          ],
+        });
+        table.push([
+          chalk.green(arrayLinks.length),
+          chalk.green(uniqueLinks.length),
+          chalk.red(brokenLinks),
+        ]);
+        this.consoleCli(table.toString());
       });
     } else {
-      this.consoleCli(currentPath);
-      this.consoleCli(
-        `Total:${arrayLinks.length} \nUnique:${uniqueLinks.length}`
-      );
+      this.consoleCli(currentPath, chalk.green);
+      let table = new Table({
+        head: [chalk.magentaBright("Total"), chalk.magentaBright("Unique")],
+      });
+      table.push([
+        chalk.yellow(arrayLinks.length),
+        chalk.yellow(uniqueLinks.length),
+      ]);
+      this.consoleCli(table.toString());
     }
   };
   /**
@@ -80,7 +100,8 @@ function ObjectFn(isCli, validate, stats) {
                 res.ok ? "ok" : "fail",
                 res.statusCode,
                 objectLink.text,
-              ].join(" ")
+              ].join(" "),
+              chalk.green
             );
           }
           objectLink.status = res.statusCode;
@@ -97,7 +118,8 @@ function ObjectFn(isCli, validate, stats) {
                 error.response.ok ? "ok" : "fail",
                 error.response.statusCode,
                 objectLink.text,
-              ].join(" ")
+              ].join(" "),
+              chalk.red
             );
           }
           objectLink.status = error.response.statusCode;
@@ -156,7 +178,10 @@ function ObjectFn(isCli, validate, stats) {
   this.readMultipleFiles = (filterDir, currentPath) => {
     let promisesArray = [];
     if (!filterDir) {
-      this.consoleCli("Diretório não possui arquivos com extensão md");
+      this.consoleCli(
+        "Diretório não possui arquivos com extensão md",
+        chalk.red
+      );
       return [];
     } else {
       for (const element of filterDir) {
@@ -202,7 +227,10 @@ function ObjectFn(isCli, validate, stats) {
         } else {
           for (const element of findLinkReturn) {
             newArrayObjectLinks.push(element);
-            this.consoleCli(`${path} ${element.href} ${element.text}`);
+            this.consoleCli(
+              `${path} ${element.href} ${element.text}`,
+              chalk.green
+            );
           }
           resolve(newArrayObjectLinks);
         }
@@ -236,7 +264,7 @@ function ObjectFn(isCli, validate, stats) {
             ];
           } else {
             resolve([]);
-            this.consoleCli("Arquivo não possui extensão markdown");
+            this.consoleCli("Arquivo não possui extensão markdown", chalk.red);
           }
         } else if (status.isDirectory()) {
           promiseResolve = new Promise((resolve, reject) => {
