@@ -74,7 +74,8 @@ mdLinks("./diretorio_exemplo", {
             ok
         }]
     })
-//Caso o diretório contenha mais de um arquivo .md, os links de todos os arquivos serão resolvidos em um mesmo array.
+//Caso o diretório contenha mais de um arquivo .md 
+//os links de todos os arquivos serão resolvidos em um mesmo array.
 ```
 
 ## 3. CLI - Command Line Interface
