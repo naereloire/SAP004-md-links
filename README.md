@@ -1,4 +1,4 @@
-# Markdown Links
+# Markdown Links :link:
 
 ## Índice
 
@@ -32,7 +32,7 @@ Conjuto de funções pré-compiladas, disponíveis para utilização no código.
 
 - [Node.js](https://nodejs.org/) que contém o [npm](https://docs.npmjs.com/) para instalação das dependências.
 
-:rocket:Instale executando:
+:zap:Instale executando:
 
 ```sh
 npm install naereloire/md-links
@@ -88,7 +88,7 @@ Executável que pode ser executado através do terminal.
 
 ### 3.1 Instalação e utilização
 
-Instale executando:
+:zap:Instale executando:
 
 ```sh
 npm install -g naereloire/md-links
