@@ -151,7 +151,7 @@ Para acessar documentação.
  * Lib [superagent](https://github.com/visionmedia/superagent) para requisição via HTTP client
 
 <p align="center">
-<img src="https://media.giphy.com/media/11BbGyhVmk4iLS/giphy.gif" width="200" heigth="200"> 
+<img src="https://media.giphy.com/media/11BbGyhVmk4iLS/giphy.gif" width="300" heigth="300"> 
 </p>
 
 * [Clone](https://help.github.com/articles/cloning-a-repository/) o projeto na sua máquina executando o seguinte comando no seu terminal:
