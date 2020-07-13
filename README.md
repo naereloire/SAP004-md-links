@@ -140,6 +140,8 @@ Broken: 1
 
 ##### `--help ou -h`
 
+Para acessar documentação.
+
 ### 4. Montagem do ambiente de desenvolvimento
 
 > :warning: Será necessária a utilização:
@@ -149,7 +151,9 @@ Broken: 1
  * Lib [superagent](https://github.com/visionmedia/superagent) para requisição via HTTP client
 
 <center>
+
 <img src="https://media.giphy.com/media/11BbGyhVmk4iLS/giphy.gif" width="200" heigth="200"> 
+
 </center>
 
 * [Clone](https://help.github.com/articles/cloning-a-repository/) o projeto na sua máquina executando o seguinte comando no seu terminal:
