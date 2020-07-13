@@ -98,8 +98,11 @@ Execute fornecendo os argumentos:
 
 > - `path`
 >   Caminho do diretório ou arquivo, relativou ou absoluto.
+>
 > - `options`
+>
 >   Flags de validação e estatística, opicionais:
+>
 >   - `--validate.`
 >   - `--stats.`
 >   - `--validate` e `--stats.`
@@ -203,10 +206,10 @@ npm test
 npm run pretest
 ```
 
-Esse projeto faz parte do currículo do [Bootcamp da Laboratória Brasil](https://www.laboratoria.la/br)
-
 <center>
 
-Desenvolvimento [Naere Loire](https://github.com/naereloire):octocat:
+Esse projeto faz parte do currículo do [Bootcamp da Laboratória Brasil](https://www.laboratoria.la/br)
+
+Desenvolvimento [Naere Loire](https://github.com/naereloire) :octocat:
 
 </center>
