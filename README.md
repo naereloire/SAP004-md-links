@@ -3,9 +3,9 @@
 ## Índice
 
 * [1. Resumo do projeto](#1-resumo-do-projeto)
-* [2. Library](#2-library)
+* [2. LIB - library](#2-lib-library)
 * [2.1 Instalação e utilização](#2.1-instalação-e-utilização)
-* [3. CLI](#3-cli)
+* [3. CLI - Command Line Interface](#3-cli-command-line-interface)
 * [3.1 Instalação e utilização](#3.1-instalação-e-utilização)
 * [4. Montagem do ambiente de desenvolvimento](#4-montagem-do-ambiente-de-desenvolvimento)
 * [4.1 Guia de estilo](#4.1-guia-de-estilo)
@@ -18,11 +18,11 @@
 
 Arquivos `Markdown` podem conter links, tabelas, imagens etc.
 
-O objetivo da ferramenta `md links` é, indentificar arquivos que contenham extensão markdown(.md), podendo ainda realizar validações e gerar estatísticas simples como quantidade total de links no arquivo, links únicos e quebrados.
+O objetivo da ferramenta `md links` é, indentificar arquivos que contenham extensão markdown (.md), podendo ainda realizar validações e gerar estatísticas simples como quantidade total de links nos arquivos, links únicos e quebrados.
 
-Foram desevolvidas duas formas de implementação, library e CLI (Command Line Interface).
+Foram desevolvidas duas formas de implementação, `LIB` (library) e `CLI` (Command Line Interface).
 
-## 2. Library 
+## 2. LIB -Library
 
 Conjuto de funções pré-compiladas, disponíveis para utilização no código.
 
@@ -77,13 +77,13 @@ mdLinks("./diretorio_exemplo", {
 //Caso o diretório contenha mais de um arquivo .md, os links de todos os arquivos serão resolvidos em um mesmo array.
 ```
 
-## 3. CLI(Command Line Interface)
+## 3. CLI - Command Line Interface
+
+Executável que pode ser executado através do terminal.
 
 > :warning: Será necessária a utilização:
 
  * [Node.js](https://nodejs.org/) que contém o [npm](https://docs.npmjs.com/) para instalação das dependências.
-
-Executável que pode ser executado através do terminal.
 
 ### 3.1 Instalação e utilização
 
