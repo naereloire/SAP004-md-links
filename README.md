@@ -112,7 +112,7 @@ $ md-links ./diretorio_exemplo/arquivo.md
 ./diretorio_exemplo/arquivo.md http://exemplo1/ Link de algo
 ```
 
-##### `--validate`
+##### `--validate ou -v`
 
 ``` sh
 $ md-links ./diretorio_exemplo/arquivo.md --validate
@@ -121,7 +121,7 @@ $ md-links ./diretorio_exemplo/arquivo.md --validate
 ./diretorio_exemplo/arquivo.md http://exemplo3/ ok 200 Link de algo
 ```
 
-##### `--stats`
+##### `--stats ou -s`
 
 ``` sh
 $ md-links ./diretorio_exemplo/arquivo.md --stats
@@ -129,7 +129,7 @@ Total:  3
 Unique: 3
 ```
 
-##### `--validate e stats`
+##### `--validate ou -v e stats ou -s`
 
 ``` sh
 $ md-links ./diretorio_exemplo/arquivo.md  --validate --stats
@@ -137,6 +137,8 @@ Total:  3
 Unique: 3
 Broken: 1
 ```
+
+##### `--help ou -h`
 
 ### 4. Montagem do ambiente de desenvolvimento
 
