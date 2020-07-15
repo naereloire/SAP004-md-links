@@ -2,13 +2,13 @@
 
 ## Índice
 
-- [1. Resumo do projeto](#1-resumo-do-projeto)
-- [2. LIB - library](#2-lib-library)
-- [2.1 Instalação e utilização](#2.1-instalação-e-utilização)
-- [3. CLI - Command Line Interface](#3-cli-command-line-interface)
-- [3.1 Instalação e utilização](#3.1-instalação-e-utilização)
-- [4. Montagem do ambiente de desenvolvimento](#4-montagem-do-ambiente-de-desenvolvimento)
-- [4.1 Guia de estilo](#4.1-guia-de-estilo)
+* [1. Resumo do projeto](#1-resumo-do-projeto)
+* [2. LIB - library](#2-lib-library)
+* [2.1 Instalação e utilização](#2.1-instalação-e-utilização)
+* [3. CLI - Command Line Interface](#3-cli-command-line-interface)
+* [3.1 Instalação e utilização](#3.1-instalação-e-utilização)
+* [4. Montagem do ambiente de desenvolvimento](#4-montagem-do-ambiente-de-desenvolvimento)
+* [4.1 Guia de estilo](#4.1-guia-de-estilo)
 
 ---
 
@@ -30,30 +30,30 @@ Conjuto de funções pré-compiladas, disponíveis para utilização no código.
 
 > :warning: Será necessária a utilização:
 
-- [Node.js](https://nodejs.org/) que contém o [npm](https://docs.npmjs.com/) para instalação das dependências.
+* [Node.js](https://nodejs.org/) que contém o [npm](https://docs.npmjs.com/) para instalação das dependências.
 
-:zap:Instale executando:
+:zap: Instale executando:
 
-```sh
+``` sh
 npm install naereloire/md-links
 ```
 
 Importe no seu código utilizando `require` :
 
-```js
+``` js
 const mdLinks = require("md-links");
 ```
 
 Execute fornecendo os argumentos:
 
 > - `path`
->   caminho do diretório ou arquivo, relativou ou absoluto.
+> caminho do diretório ou arquivo, relativou ou absoluto.
 > - `options`
->   objeto contendo a key `validate` , com valor boleano.
+> objeto contendo a key `validate` , com valor boleano.
 
 ##### Exemplo:
 
-```js
+``` js
 //diretório
 mdLinks("./diretorio_exemplo/arquivo.md").then((links) => [{
     file,
@@ -84,38 +84,38 @@ Executável que pode ser executado através do terminal.
 
 > :warning: Será necessária a utilização:
 
-- [Node.js](https://nodejs.org/) que contém o [npm](https://docs.npmjs.com/) para instalação das dependências.
+* [Node.js](https://nodejs.org/) que contém o [npm](https://docs.npmjs.com/) para instalação das dependências.
 
 ### 3.1 Instalação e utilização
 
-:zap:Instale executando:
+:zap: Instale executando:
 
-```sh
+``` sh
 npm install -g naereloire/md-links
 ```
 
 Execute fornecendo os argumentos:
 
 > - `path`
->   Caminho do diretório ou arquivo, relativou ou absoluto.
+> Caminho do diretório ou arquivo, relativou ou absoluto.
 > - `options`
->   Flags de validação e estatística, opicionais:
+> Flags de validação e estatística, opicionais:
 > - `--validate.`
 > - `--stats.`
 > - `--validate` e `--stats.`
 
 ##### Exemplo:
 
-```sh
+``` sh
 $ md-links ./diretorio_exemplo/arquivo.md
 ./diretorio_exemplo/arquivo.md http://exemplo1/ Link de algo
 ./diretorio_exemplo/arquivo.md http://exemplo2/ Link de algo
-./diretorio_exemplo/arquivo.md http://exemplo1/ Link de algo
+./diretorio_exemplo/arquivo.md http://exemplo3/ Link de algo
 ```
 
 ##### `--validate ou -v`
 
-```sh
+``` sh
 $ md-links ./diretorio_exemplo/arquivo.md --validate
 ./diretorio_exemplo/arquivo.md http://exemplo1/ ok 200 Link de algo
 ./diretorio_exemplo/arquivo.md http://exemplo2/ fail 404 Link de algo
@@ -124,7 +124,7 @@ $ md-links ./diretorio_exemplo/arquivo.md --validate
 
 ##### `--stats ou -s`
 
-```sh
+``` sh
 $ md-links ./diretorio_exemplo/arquivo.md --stats
 Total:  3
 Unique: 3
@@ -132,7 +132,7 @@ Unique: 3
 
 ##### `--validate ou -v e stats ou -s`
 
-```sh
+``` sh
 $ md-links ./diretorio_exemplo/arquivo.md  --validate --stats
 Total:  3
 Unique: 3
@@ -147,49 +147,49 @@ Para acessar documentação.
 
 > :warning: Será necessária a utilização:
 
-- [Node.js](https://nodejs.org/) que contém o [npm](https://docs.npmjs.com/) para instalação das dependências.
-- Lib [commander](https://github.com/tj/commander.js/) para desenvolvimento da CLI(Command Line Interface).
-- Lib [superagent](https://github.com/visionmedia/superagent) para requisição via HTTP client
+* [Node.js](https://nodejs.org/) que contém o [npm](https://docs.npmjs.com/) para instalação das dependências.
+* Lib [commander](https://github.com/tj/commander.js/) para desenvolvimento da CLI(Command Line Interface).
+* Lib [superagent](https://github.com/visionmedia/superagent) para requisição via HTTP client
 
 <p align="center">
 <img src="https://media.giphy.com/media/11BbGyhVmk4iLS/giphy.gif" width="300" heigth="300"> 
 </p>
 
-- [Clone](https://help.github.com/articles/cloning-a-repository/) o projeto na sua máquina executando o seguinte comando no seu terminal:
+* [Clone](https://help.github.com/articles/cloning-a-repository/) o projeto na sua máquina executando o seguinte comando no seu terminal:
 
 -https
 
-```sh
+``` sh
 git clone https://github.com/naereloire/md-links.git
 ```
 
-- Instale as dependências do projeto com o comando:
+* Instale as dependências do projeto com o comando:
 
-```sh
+``` sh
 npm install
 ```
 
-- Instale e execute o commander:
+* Instale e execute o commander:
 
-```sh
+``` sh
 npm install commander
 ```
 
-- Instale e execute o superagent:
+* Instale e execute o superagent:
 
-```sh
+``` sh
 npm install superagent
 ```
 
-- Para executar localmente:
+* Para executar localmente:
 
-```sh
+``` sh
 npm link
 ```
 
-- Para executar os testes:
+* Para executar os testes:
 
-```sh
+``` sh
 npm test
 ```
 
@@ -197,9 +197,9 @@ npm test
 
 :warning: Neste projeto a regras de [ESLint](https://eslint.org/) seguem o padrão [Airbnb JavaScript Style Guide](https://github.com/armoucar/javascript-style-guide)
 
-- Para verificar erros do ESLint:
+* Para verificar erros do ESLint:
 
-```sh
+``` sh
 npm run pretest
 ```
 
