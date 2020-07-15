@@ -54,14 +54,14 @@ Execute fornecendo os argumentos:
 ##### Exemplo:
 
 ``` js
-//diretório
+//diretório e arquivo .md
 mdLinks("./diretorio_exemplo/arquivo.md").then((links) => [{
     file,
     text,
     href
 }])
 
-//arquivo
+//diretório 
 mdLinks("./diretorio_exemplo", {
         validate: true
     })
